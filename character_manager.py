@@ -23,31 +23,33 @@ from custom_exceptions import (
 # ============================================================================
 
 def create_character(name, character_class):
-    """
-    Create a new character with stats based on class
+    if character_class not in ["Warrior", "Mage", "Rogue", "Cleric"]:
+        raise InvalidCharacterClassError(f"Invalid class: {character_class}")
     
-    Valid classes: Warrior, Mage, Rogue, Cleric
-    
-    Returns: Dictionary with character data including:
-            - name, class, level, health, max_health, strength, magic
-            - experience, gold, inventory, active_quests, completed_quests
-    
-    Raises: InvalidCharacterClassError if class is not valid
-    """
-    # TODO: Implement character creation
-    # Validate character_class first
-    # Example base stats:
-    # Warrior: health=120, strength=15, magic=5
-    # Mage: health=80, strength=8, magic=20
-    # Rogue: health=90, strength=12, magic=10
-    # Cleric: health=100, strength=10, magic=15
-    
-    # All characters start with:
-    # - level=1, experience=0, gold=100
-    # - inventory=[], active_quests=[], completed_quests=[]
-    
-    # Raise InvalidCharacterClassError if class not in valid list
-    pass
+    base_stats = {
+        "Warrior": {"health": 120, "strength": 15, "magic": 5},
+        "Mage": {"health": 80, "strength": 8, "magic": 20},
+        "Rogue": {"health": 90, "strength": 12, "magic": 10},
+        "Cleric": {"health": 100, "strength": 10, "magic": 15}
+    }
+
+    stats = base_stats[character_class]
+
+    character = {
+        "name": name,
+        "class": character_class,
+        "level": 1,
+        "health": stats["health"],
+        "max_health": stats["health"],
+        "strength": stats["strength"],
+        "magic": stats["magic"],
+        "experience": 0,
+        "gold": 100,
+        "inventory": [],
+        "active_quests": [],
+        "completed_quests": []
+    }
+    return character
 
 def save_character(character, save_directory="data/save_games"):
     """
