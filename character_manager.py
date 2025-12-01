@@ -152,20 +152,10 @@ def gain_experience(character, xp_amount):
     return level_ups
 
 def add_gold(character, amount):
-    """
-    Add gold to character's inventory
-    
-    Args:
-        character: Character dictionary
-        amount: Amount of gold to add (can be negative for spending)
-    
-    Returns: New gold total
-    Raises: ValueError if result would be negative
-    """
-    # TODO: Implement gold management
-    # Check that result won't be negative
-    # Update character's gold
-    pass
+    character['gold'] += amount
+    if character['gold'] < 0:
+        raise ValueError("Gold cannot be negative")
+    return character['gold']
 
 def heal_character(character, amount):
     """
