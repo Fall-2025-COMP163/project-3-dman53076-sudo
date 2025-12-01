@@ -170,35 +170,47 @@ def is_character_dead(character):
         return False
 
 def revive_character(character):
-    """
-    Revive a dead character with 50% health
-    
-    Returns: True if revived
-    """
-    # TODO: Implement revival
-    # Restore health to half of max_health
-    pass
+    if character['health'] > 0:
+        return False
+    if character['health'] <= 0:
+        character['health'] = character['max_health'] // 2
+        return True
 
 # ============================================================================
 # VALIDATION
 # ============================================================================
 
 def validate_character_data(character):
-    """
-    Validate that character dictionary has all required fields
-    
-    Required fields: name, class, level, health, max_health, 
-                    strength, magic, experience, gold, inventory,
-                    active_quests, completed_quests
-    
-    Returns: True if valid
-    Raises: InvalidSaveDataError if missing fields or invalid types
-    """
-    # TODO: Implement validation
-    # Check all required keys exist
-    # Check that numeric values are numbers
-    # Check that lists are actually lists
-    pass
+    required_fields = [
+        "name", "class", "level", "health", "max_health",
+        "strength", "magic", "experience", "gold",
+        "inventory", "active_quests", "completed_quests"
+    ]
+
+    for field in required_fields:
+        if field not in character:
+            raise InvalidSaveDataError(f"Missing field: {field}")
+    if not isinstance(character['level'], int) or character['level'] < 1:
+        raise InvalidSaveDataError("Invalid level value")
+    if not isinstance(character['health'], int) or character['health'] < 0:
+        raise InvalidSaveDataError("Invalid health value")
+    if not isinstance(character['max_health'], int) or character['max_health'] < 1:
+        raise InvalidSaveDataError("Invalid max_health value")
+    if not isinstance(character['strength'], int) or character['strength'] < 0: 
+        raise InvalidSaveDataError("Invalid strength value")
+    if not isinstance(character['magic'], int) or character['magic'] < 0:
+        raise InvalidSaveDataError("Invalid magic value")
+    if not isinstance(character['experience'], int) or character['experience'] < 0:
+        raise InvalidSaveDataError("Invalid experience value")
+    if not isinstance(character['gold'], int) or character['gold'] < 0:
+        raise InvalidSaveDataError("Invalid gold value")
+    if not isinstance(character['inventory'], list):
+        raise InvalidSaveDataError("Invalid inventory value")
+    if not isinstance(character['active_quests'], list):
+        raise InvalidSaveDataError("Invalid active_quests value")
+    if not isinstance(character['completed_quests'], list):
+        raise InvalidSaveDataError("Invalid completed_quests value")
+    return True
 
 # ============================================================================
 # TESTING
