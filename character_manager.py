@@ -2,9 +2,9 @@
 COMP 163 - Project 3: Quest Chronicles
 Character Manager Module - Starter Code
 
-Name: [Your Name Here]
+Name: Daniel Crandle
 
-AI Usage: [Document any AI assistance used]
+AI Usage: Used ChatGPT to help check for errors on my saving and loading functions and had it suggest improvements for data validation. 
 
 This module handles character creation, loading, and saving.
 """
