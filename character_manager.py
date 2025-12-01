@@ -119,15 +119,18 @@ def list_saved_characters(save_directory="data/save_games"):
     return character_names
 
 def delete_character(character_name, save_directory="data/save_games"):
-    """
-    Delete a character's save file
+    if not os.path.exists(save_directory):
+        raise CharacterNotFoundError(f"No save directory found: {save_directory}")
     
-    Returns: True if deleted successfully
-    Raises: CharacterNotFoundError if character doesn't exist
-    """
-    # TODO: Implement character deletion
-    # Verify file exists before attempting deletion
-    pass
+    filename = os.path.join(save_directory, f"{character_name}_save.txt")
+    if not os.path.isfile(filename):
+        raise CharacterNotFoundError(f"Character save file not found: {filename}")
+    
+    try:
+        os.remove(filename)
+        return True
+    except OSError as e:
+        raise e
 
 # ============================================================================
 # CHARACTER OPERATIONS
