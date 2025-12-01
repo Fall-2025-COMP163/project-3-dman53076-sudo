@@ -53,12 +53,10 @@ class SimpleBattle:
     """
     
     def __init__(self, character, enemy):
-        """Initialize battle with character and enemy"""
-        # TODO: Implement initialization
-        # Store character and enemy
-        # Set combat_active flag
-        # Initialize turn counter
-        pass
+        self.character = character
+        self.enemy = enemy
+        self.combat_active = False
+        self.turn_counter = 0
     
     def start_battle(self):
         """
@@ -73,7 +71,25 @@ class SimpleBattle:
         # Check character isn't dead
         # Loop until someone dies
         # Award XP and gold if player wins
-        pass
+        if self.character['health'] <= 0:
+            raise CharacterDeadError(f"{self.character['name']} is dead and cannot fight!")
+        self.combat_active = True
+        self.turn_counter = 1
+        while self.combat_active:
+            self.display_combat_stats(self.character, self.enemy)
+            self.player_turn()
+            if self.check_battle_end():
+                break
+            self.enemy_turn()
+            if self.check_battle_end():
+                break
+            self.turn_counter += 1
+        if self.enemy['health'] <= 0:
+            xp_gained = self.enemy['xp_reward']
+            gold_gained = self.enemy['gold_reward']
+            return {'winner': 'player', 'xp_gained': xp_gained, 'gold_gained': gold_gained}
+        else:
+            return {'winner': 'enemy', 'xp_gained': 0, 'gold_gained': 0}
     
     def player_turn(self):
         """
@@ -94,6 +110,11 @@ class SimpleBattle:
         pass
     
     def enemy_turn(self):
+        if not self.combat_active:
+            raise CombatNotActiveError("Cannot take enemy turn: combat is not active")
+        calculate_damage = self.calculate_damage(self.enemy, self.character)
+        self.apply_damage(self.character, calculate_damage)
+        self.display_battle_log(f"{self.enemy['name']} attacks {self.character['name']} for {calculate_damage} damage!")
         """
         Handle enemy's turn - simple AI
         
@@ -105,50 +126,31 @@ class SimpleBattle:
         # Check combat is active
         # Calculate damage
         # Apply to character
-        pass
     
     def calculate_damage(self, attacker, defender):
-        """
-        Calculate damage from attack
-        
-        Damage formula: attacker['strength'] - (defender['strength'] // 4)
-        Minimum damage: 1
-        
-        Returns: Integer damage amount
-        """
-        # TODO: Implement damage calculation
-        pass
+        damage = attacker['strength'] - (defender['strength'] // 4)
+        if damage < 1:
+            damage = 1
+        return damage
     
     def apply_damage(self, target, damage):
-        """
-        Apply damage to a character or enemy
-        
-        Reduces health, prevents negative health
-        """
-        # TODO: Implement damage application
-        pass
+        target['health'] -= damage
+        if target['health'] < 0:
+            target['health'] = 0
     
     def check_battle_end(self):
-        """
-        Check if battle is over
-        
-        Returns: 'player' if enemy dead, 'enemy' if character dead, None if ongoing
-        """
-        # TODO: Implement battle end check
-        pass
+        if self.enemy['health'] <= 0 or self.character['health'] <= 0:
+            self.combat_active = False
+            return True
+        return False
     
     def attempt_escape(self):
-        """
-        Try to escape from battle
-        
-        50% success chance
-        
-        Returns: True if escaped, False if failed
-        """
-        # TODO: Implement escape attempt
-        # Use random number or simple calculation
-        # If successful, set combat_active to False
-        pass
+        import random
+        random_chance = random.random(1, 100)
+        if random_chance < 50:
+            self.combat_active = False
+            return True
+        return False
 
 # ============================================================================
 # SPECIAL ABILITIES
@@ -202,41 +204,29 @@ def cleric_heal(character):
 # ============================================================================
 
 def can_character_fight(character):
-    """
-    Check if character is in condition to fight
-    
-    Returns: True if health > 0 and not in battle
-    """
-    # TODO: Implement fight check
-    pass
+    if character['health'] > 0 and not character.get('in_battle', False):
+        return True
 
 def get_victory_rewards(enemy):
-    """
-    Calculate rewards for defeating enemy
-    
-    Returns: Dictionary with 'xp' and 'gold'
-    """
-    # TODO: Implement reward calculation
-    pass
+    rewards = {
+        'xp': enemy['xp_reward'],
+        'gold': enemy['gold_reward']
+    }
+    return rewards  
 
 def display_combat_stats(character, enemy):
-    """
-    Display current combat status
-    
-    Shows both character and enemy health/stats
-    """
-    # TODO: Implement status display
     print(f"\n{character['name']}: HP={character['health']}/{character['max_health']}")
     print(f"{enemy['name']}: HP={enemy['health']}/{enemy['max_health']}")
     pass
 
 def display_battle_log(message):
+
     """
     Display a formatted battle message
     """
     # TODO: Implement battle log display
     print(f">>> {message}")
-    pass
+
 
 # ============================================================================
 # TESTING
@@ -244,6 +234,23 @@ def display_battle_log(message):
 
 if __name__ == "__main__":
     print("=== COMBAT SYSTEM TEST ===")
+
+    try:
+        test_char = {
+            'name': 'Hero',
+            'class': 'Warrior',
+            'level': 3,
+            'health': 100,
+            'max_health': 100,
+            'strength': 15,
+            'magic': 5,
+        }
+        goblin = create_enemy("goblin")
+        battle = SimpleBattle(test_char, goblin)
+        result = battle.start_battle()
+        print(f"Battle result: {result}")
+    except CharacterDeadError as e:
+        print(f"Cannot start battle: {e}")
     
     # Test enemy creation
     # try:
