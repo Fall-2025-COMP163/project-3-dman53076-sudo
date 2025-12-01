@@ -158,17 +158,10 @@ def add_gold(character, amount):
     return character['gold']
 
 def heal_character(character, amount):
-    """
-    Heal character by specified amount
-    
-    Health cannot exceed max_health
-    
-    Returns: Actual amount healed
-    """
-    # TODO: Implement healing
-    # Calculate actual healing (don't exceed max_health)
-    # Update character health
-    pass
+    character['health'] += amount
+    if character['health'] > character['max_health']:
+        character['health'] = character['max_health']
+    return character['health']
 
 def is_character_dead(character):
     """
