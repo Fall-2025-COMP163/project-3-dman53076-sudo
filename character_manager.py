@@ -99,15 +99,17 @@ def load_character(character_name, save_directory="data/save_games"):
         raise InvalidSaveDataError(f"Invalid data in save file: {filename}") from e 
 
 def list_saved_characters(save_directory="data/save_games"):
-    """
-    Get list of all saved character names
+    if not os.path.exists(save_directory):
+        return []
     
-    Returns: List of character names (without _save.txt extension)
-    """
-    # TODO: Implement this function
-    # Return empty list if directory doesn't exist
-    # Extract character names from filenames
-    pass
+    character_names = []
+
+    for filename in os.listdir(save_directory):
+        suffix = "_save.txt"
+        if filename.endswith(suffix):
+            character_name = filename[:-len(suffix)]  # Remove '_save.txt'
+            character_names.append(character_name)
+    return character_names
 
 def delete_character(character_name, save_directory="data/save_games"):
     """
