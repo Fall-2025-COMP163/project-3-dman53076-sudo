@@ -85,7 +85,14 @@ def load_character(character_name, save_directory="data/save_games"):
             lines = file.readlines()
             character = {}
             for line in lines:
-                key, value = line.strip().split(": ", 1)
+                line = line.strip()
+                if not line:
+                    continue
+                if ": " not in line:
+                    raise InvalidSaveDataError(f"Invalid line in save file: {line}")
+                key, value = line.split(": ", 1)
+                key = key.strip()
+                value = value.strip()
                 if key in ["LEVEL", "HEALTH", "MAX_HEALTH", "STRENGTH", "MAGIC", "EXPERIENCE", "GOLD"]:
                     character[key.lower()] = int(value)
                 elif key in ["INVENTORY", "ACTIVE_QUESTS", "COMPLETED_QUESTS"]:
