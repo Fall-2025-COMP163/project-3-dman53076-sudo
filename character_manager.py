@@ -137,25 +137,19 @@ def delete_character(character_name, save_directory="data/save_games"):
 # ============================================================================
 
 def gain_experience(character, xp_amount):
-    """
-    Add experience to character and handle level ups
-    
-    Level up formula: level_up_xp = current_level * 100
-    Example when leveling up:
-    - Increase level by 1
-    - Increase max_health by 10
-    - Increase strength by 2
-    - Increase magic by 2
-    - Restore health to max_health
-    
-    Raises: CharacterDeadError if character health is 0
-    """
-    # TODO: Implement experience gain and leveling
-    # Check if character is dead first
-    # Add experience
-    # Check for level up (can level up multiple times)
-    # Update stats on level up
-    pass
+    if character['health'] <= 0:
+        raise CharacterDeadError(f"Cannot gain experience: {character['name']} is dead")
+    level_ups = 0
+    character['experience'] += xp_amount
+    while character['experience'] >= character['level'] * 100:
+        character['experience'] -= character['level'] * 100
+        character['level'] += 1
+        character['max_health'] += 10
+        character['strength'] += 2
+        character['magic'] += 2
+        character['health'] = character['max_health']
+        level_ups += 1
+    return level_ups
 
 def add_gold(character, amount):
     """
