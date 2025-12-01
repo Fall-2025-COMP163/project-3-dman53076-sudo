@@ -152,9 +152,9 @@ def gain_experience(character, xp_amount):
     return level_ups
 
 def add_gold(character, amount):
-    character['gold'] += amount
-    if character['gold'] < 0:
+    if character['gold'] + amount < 0:
         raise ValueError("Gold cannot be negative")
+    character['gold'] += amount
     return character['gold']
 
 def heal_character(character, amount):
@@ -172,9 +172,8 @@ def is_character_dead(character):
 def revive_character(character):
     if character['health'] > 0:
         return False
-    if character['health'] <= 0:
-        character['health'] = character['max_health'] // 2
-        return True
+    character['health'] = character['max_health'] // 2
+    return True
 
 # ============================================================================
 # VALIDATION
