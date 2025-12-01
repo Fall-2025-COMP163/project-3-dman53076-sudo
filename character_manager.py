@@ -75,25 +75,28 @@ def save_character(character, save_directory="data/save_games"):
         raise e
 
 def load_character(character_name, save_directory="data/save_games"):
-    """
-    Load character from save file
-    
-    Args:
-        character_name: Name of character to load
-        save_directory: Directory containing save files
-    
-    Returns: Character dictionary
-    Raises: 
-        CharacterNotFoundError if save file doesn't exist
-        SaveFileCorruptedError if file exists but can't be read
-        InvalidSaveDataError if data format is wrong
-    """
-    # TODO: Implement load functionality
-    # Check if file exists → CharacterNotFoundError
-    # Try to read file → SaveFileCorruptedError
-    # Validate data format → InvalidSaveDataError
-    # Parse comma-separated lists back into Python lists
-    pass
+    if not os.path.exists(save_directory):
+        raise CharacterNotFoundError(f"No save directory found: {save_directory}")
+    filename = os.path.join(save_directory, f"{character_name}_save.txt")
+    if not os.path.isfile(filename):
+        raise CharacterNotFoundError(f"Character save file not found: {filename}")
+    try:
+        with open(filename, 'r') as file:
+            lines = file.readlines()
+            character = {}
+            for line in lines:
+                key, value = line.strip().split(": ", 1)
+                if key in ["LEVEL", "HEALTH", "MAX_HEALTH", "STRENGTH", "MAGIC", "EXPERIENCE", "GOLD"]:
+                    character[key.lower()] = int(value)
+                elif key in ["INVENTORY", "ACTIVE_QUESTS", "COMPLETED_QUESTS"]:
+                    character[key.lower()] = value.split(",") if value else []
+                else:
+                    character[key.lower()] = value
+            return character
+    except IOError:
+        raise SaveFileCorruptedError(f"Could not read save file: {filename}")
+    except Exception as e:
+        raise InvalidSaveDataError(f"Invalid data in save file: {filename}") from e 
 
 def list_saved_characters(save_directory="data/save_games"):
     """
