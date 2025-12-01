@@ -2,7 +2,7 @@
 COMP 163 - Project 3: Quest Chronicles
 Combat System Module - Starter Code
 
-Name: [Your Name Here]
+Name: Daniel Crandle
 
 AI Usage: [Document any AI assistance used]
 
@@ -21,6 +21,17 @@ from custom_exceptions import (
 # ============================================================================
 
 def create_enemy(enemy_type):
+    enemy_types = {
+        "goblin": {"name": "Goblin", "health": 50, "strength": 8, "magic": 2, "xp_reward": 25, "gold_reward": 10},
+        "orc": {"name": "Orc", "health": 80, "strength": 12, "magic": 5, "xp_reward": 50, "gold_reward": 25},
+        "dragon": {"name": "Dragon", "health": 200, "strength": 25, "magic": 15, "xp_reward": 200, "gold_reward": 100}
+    }
+    
+    if enemy_type not in enemy_types:
+        raise InvalidTargetError(f"Unknown enemy type: {enemy_type}")
+    enemy = enemy_types[enemy_type]
+    enemy['max_health'] = enemy['health']
+    return enemy
     """
     Create an enemy based on type
     
@@ -34,7 +45,6 @@ def create_enemy(enemy_type):
     """
     # TODO: Implement enemy creation
     # Return dictionary with: name, health, max_health, strength, magic, xp_reward, gold_reward
-    pass
 
 def get_random_enemy_for_level(character_level):
     """
