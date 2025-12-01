@@ -88,9 +88,9 @@ def load_character(character_name, save_directory="data/save_games"):
                 line = line.strip()
                 if not line:
                     continue
-                if ": " not in line:
+                if ":" not in line:
                     raise InvalidSaveDataError(f"Invalid line in save file: {line}")
-                key, value = line.split(": ", 1)
+                key, value = line.split(":", 1)
                 key = key.strip()
                 value = value.strip()
                 if key in ["LEVEL", "HEALTH", "MAX_HEALTH", "STRENGTH", "MAGIC", "EXPERIENCE", "GOLD"]:
