@@ -26,41 +26,21 @@ def create_enemy(enemy_type):
         "orc": {"name": "Orc", "health": 80, "strength": 12, "magic": 5, "xp_reward": 50, "gold_reward": 25},
         "dragon": {"name": "Dragon", "health": 200, "strength": 25, "magic": 15, "xp_reward": 200, "gold_reward": 100}
     }
-    
+
     if enemy_type not in enemy_types:
         raise InvalidTargetError(f"Unknown enemy type: {enemy_type}")
     enemy = enemy_types[enemy_type]
     enemy['max_health'] = enemy['health']
     return enemy
-    """
-    Create an enemy based on type
-    
-    Example enemy types and stats:
-    - goblin: health=50, strength=8, magic=2, xp_reward=25, gold_reward=10
-    - orc: health=80, strength=12, magic=5, xp_reward=50, gold_reward=25
-    - dragon: health=200, strength=25, magic=15, xp_reward=200, gold_reward=100
-    
-    Returns: Enemy dictionary
-    Raises: InvalidTargetError if enemy_type not recognized
-    """
-    # TODO: Implement enemy creation
-    # Return dictionary with: name, health, max_health, strength, magic, xp_reward, gold_reward
 
 def get_random_enemy_for_level(character_level):
-    """
-    Get an appropriate enemy for character's level
+    if character_level <= 2:
+        return create_enemy("goblin")  
+    elif 3 <= character_level <= 5:
+        return create_enemy("orc")
+    else:
+        return create_enemy("dragon")
     
-    Level 1-2: Goblins
-    Level 3-5: Orcs
-    Level 6+: Dragons
-    
-    Returns: Enemy dictionary
-    """
-    # TODO: Implement level-appropriate enemy selection
-    # Use if/elif/else to select enemy type
-    # Call create_enemy with appropriate type
-    pass
-
 # ============================================================================
 # COMBAT SYSTEM
 # ============================================================================
