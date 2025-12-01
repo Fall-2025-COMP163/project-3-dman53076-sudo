@@ -4,7 +4,7 @@ Character Manager Module - Starter Code
 
 Name: Daniel Crandle
 
-AI Usage: Used ChatGPT to help check for errors on my saving and loading functions and had it suggest improvements for data validation. 
+AI Usage: Used ChatGPT and Copilot to help check for errors on my saving and loading functions and had it suggest improvements for data validation. 
 
 This module handles character creation, loading, and saving.
 """
