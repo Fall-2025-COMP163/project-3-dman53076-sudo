@@ -164,13 +164,10 @@ def heal_character(character, amount):
     return character['health']
 
 def is_character_dead(character):
-    """
-    Check if character's health is 0 or below
-    
-    Returns: True if dead, False if alive
-    """
-    # TODO: Implement death check
-    pass
+    if character['health'] <= 0:
+        return True
+    else:
+        return False
 
 def revive_character(character):
     """
